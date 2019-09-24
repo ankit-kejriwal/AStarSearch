@@ -1,3 +1,10 @@
+/**
+* Team members
+* Ankit Kejriwal <akejriw1@uncc.edu>
+* Kanika Saini   <ksaini1@uncc.edu>
+* Sindhura Sadam <jsadam@uncc.edu>
+* This class takes the input and display solutions for both Manhathhan  and Misplaced tiles
+*/
 import java.util.*;
 
 public class AStar {
@@ -15,10 +22,12 @@ public class AStar {
     public  static  void main(String[] args){
         AStar astar = new AStar();
         Node initialState, goalState;
+        // input from the user
         System.out.println("Please enter the initial state row-wise with each input separated by the enter");
         initialState = initializeNode();
         System.out.println("Please enter the final state row-wise with each input separated by the enter");
         goalState = initializeNode();
+        // validate the input
         if(checkInput(initialState.getState()) && checkInput(goalState.getState())){
             astar.startProcess(initialState,goalState);
         } else {
@@ -26,6 +35,11 @@ public class AStar {
         }
     }
 
+    /**
+     * Takes a node state as an input and returns true if it is a valid input else false.
+     * @param node is a two dimensional integer array which represents the state of the board.
+     * @return a boolean true if input is valid and false if it is invalid.
+     */
     private static boolean checkInput(int[][] node) {
         ArrayList<Integer> validEntry = new ArrayList<Integer>();
         for(int i =0;i<9;i++){
@@ -44,6 +58,10 @@ public class AStar {
         return true;
     }
 
+    /**
+     * Get the input from the user and create a new node
+     * @return a new generated node
+     */
     private static Node initializeNode(){
         int[][] node = new int[3][3];
         Scanner scanner = new Scanner(System.in);
@@ -57,6 +75,11 @@ public class AStar {
         return newNode;
     }
 
+    /**
+     * Takes the initial and the goal node and display the possible solutions
+     * @param initialState Node representing initial state
+     * @param goalState representing final state
+     */
     private void startProcess(Node initialState, Node goalState){
         for(int i=0;i<hType.length;i++) {
             System.out.println("************ A* search algorithm for " +hType[i] + " *********");
@@ -132,6 +155,13 @@ public class AStar {
         }
     }
 
+    /**
+     * Takes a initial node and goal node and calculate heuristic value
+     * @param initial is a node representing the initial state.
+     * @param goal is a node representing the goal state.
+     * @param type represents the type of heuristic that needs to be calculated
+     */
+
     private void getHeuristic(Node initial, Node goal,String type){
         if(type.equalsIgnoreCase(MANHATTAN_HEURISTIC)){
             int manhattanCost = manhattanDistanceHeuristic(initial, goal);
@@ -143,6 +173,13 @@ public class AStar {
             initial.setfCost(initial.getgCost() + initial.gethCost());
         }
     }
+
+    /**
+     * Takes a initial node and goal node and calculate Manhatthan heuristic value
+     * @param initial is a node representing the initial state.
+     * @param goal is a node representing the goal state.
+     * @return a Manhatthan heuristic value for the given nodes
+     */
 
     public int manhattanDistanceHeuristic(Node initial, Node goal) {
         int[][] initialState = initial.getState();
@@ -163,6 +200,13 @@ public class AStar {
         return hCost;
     }
 
+    /**
+     * Takes a initial node and goal node and calculate Manhatthan heuristic value
+     * @param initial is a Node representing the initial state.
+     * @param goal is a Node representing the goal state.
+     * @return a Misplaced heuristic value for the given nodes
+     */
+
     public int misplacedTilesHeuristic(Node initial, Node goal) {
         int[][] initialState = initial.getState();
         int[][] goalState = goal.getState();
@@ -176,6 +220,11 @@ public class AStar {
         return hCost;
     }
 
+    /**
+     * Takes a solution path and print it
+     * @param solutionPath is a stack representing the solution of a A* search problem.
+     */
+
     private void printSolutionPath(Stack<Node> solutionPath){
         Node lastNode;
         while (!solutionPath.isEmpty()) {
@@ -186,6 +235,11 @@ public class AStar {
             }
         }
     }
+
+    /**
+     * Takes a node as an input and display it in matrix form along with g(n), h(n) anf f(n)
+     * @param node is representing a Node to be represented in matrix form
+     */
 
     private void displayPuzzle(Node node){
         int[][] nodeState = node.getState();
@@ -200,6 +254,11 @@ public class AStar {
 
     }
 
+    /**
+     * Takes a node as an input and return the position of the free space in string formated separated by commas
+     * @param node is representing a Node
+     */
+
     private String findingFreeTileLocation(Node node){
         int[][] currentState = node.getState();
         int i = 0, j = 0;
@@ -212,6 +271,20 @@ public class AStar {
         String indexOfFreeTile = i + "," +j;
         return indexOfFreeTile;
     }
+
+    /**
+     * Takes a node as an input and return the position of the free space in string formated separated by commas
+     * @param node is representing a Node
+     */
+
+    /**
+     * It computes the possible position for the free tile
+     * @param initiaNode Node representing the current state of the board.
+     * @param rowValue Row index of the free tile
+     * @param columnValue Column index of the free tile.
+     * @return a list of Strings representing comma separated indexes of valid possible free tile positions.
+     */
+
 
     private List<String> findPossibleState(Node initiaNode, int rowValue, int columnValue) {
         int[][] initialState = initiaNode.getState();
@@ -234,6 +307,15 @@ public class AStar {
                     .add(Integer.toString(rowValue) + "," + Integer.toString(columnValue - 1));
         return possiblePositionsForExpansion;
     }
+
+    /**
+     * it created a new node for based on the position of free tile
+     * @param dequeueNode Node representing the parent Node
+     * @param rowVal Row index of the free tile
+     * @param colVal Column index of the free tile.
+     * @param possiblePositionsForExpansion a String representing comma separated indexes of the next valid possible free tile positions.
+     * @return Node representing the child state
+     */
 
     private Node createChildNode(Node dequeueNode, int rowVal, int colVal, String possiblePositionsForExpansion) {
         // copying state of parent
@@ -260,6 +342,13 @@ public class AStar {
         return childNode;
     }
 
+    /**
+     * It checks whether the child node is in explored set
+     * @param exploredNodeSet list of Nodes that have been explored already
+     * @param  childStateNode Node to checked
+     * @return true if child node is in explored set else false
+     */
+
     private boolean isChildInExploredSet(HashMap<Integer, Node> exploredNodeSet, Node childStateNode) {
         for (Map.Entry<Integer, Node> entry : exploredNodeSet.entrySet()) {
             Node exploredNode = (Node) entry.getValue();
@@ -268,6 +357,13 @@ public class AStar {
         }
         return false;
     }
+
+    /**
+     * It checks whether the child node is in priority queur
+     * @param priorityQueue list of Nodes that are in Priority Queue
+     * @param  childStateNode Node to checked
+     * @return true if child node is in priority queue  else false
+     */
 
     private boolean isChildInPriorityQueue(PriorityQueue<Node> priorityQueue, Node childStateNode) {
         List<Node> pqList = new ArrayList<Node>(priorityQueue);
@@ -278,6 +374,11 @@ public class AStar {
         return false;
     }
 
+    /** It compares two nodes for equality
+     * @param first
+     * @param second
+     * @return true if nodes are equal otherwise false
+     */
     private boolean compareNodesForEquality(Node first, Node second) {
         int[][] firstState = first.getState();
         int[][] secondState = second.getState();
