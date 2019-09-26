@@ -140,6 +140,7 @@ public class AStar {
                     countOfNodesGenerated++;
                     boolean isChildInExploredSet = isChildInExploredSet(exploredNodeList, childNode);
                     boolean isChildInPriorityQueue = isChildInPriorityQueue(priorityQueue, childNode);
+
                     if (!isChildInExploredSet && !isChildInPriorityQueue) {
                         // if yes do nothing if no calculate heuristic function for child
                         getHeuristic(childNode, goalState, hType[i]);
@@ -273,11 +274,6 @@ public class AStar {
     }
 
     /**
-     * Takes a node as an input and return the position of the free space in string formated separated by commas
-     * @param node is representing a Node
-     */
-
-    /**
      * It computes the possible position for the free tile
      * @param initiaNode Node representing the current state of the board.
      * @param rowValue Row index of the free tile
@@ -309,7 +305,7 @@ public class AStar {
     }
 
     /**
-     * it created a new node for based on the position of free tile
+     * it creates a new node for based on the position of free tile
      * @param dequeueNode Node representing the parent Node
      * @param rowVal Row index of the free tile
      * @param colVal Column index of the free tile.
@@ -359,7 +355,7 @@ public class AStar {
     }
 
     /**
-     * It checks whether the child node is in priority queur
+     * It checks whether the child node is in priority queue
      * @param priorityQueue list of Nodes that are in Priority Queue
      * @param  childStateNode Node to checked
      * @return true if child node is in priority queue  else false
